@@ -10,6 +10,7 @@ const {
 const urlRegex = require('../utils/constants');
 
 router.get('/', getUsers);
+router.get('/me', getMyUser);
 
 router.get('/:userId', celebrate({
   params: Joi.object().keys({
@@ -29,7 +30,5 @@ router.patch('/me/avatar', celebrate({
     avatar: Joi.string().regex(urlRegex),
   }),
 }), editAvatarUser);
-
-router.get('/me', getMyUser);
 
 module.exports = router;
