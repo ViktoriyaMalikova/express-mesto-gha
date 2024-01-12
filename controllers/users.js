@@ -47,13 +47,11 @@ module.exports.getUsers = (req, res, next) => {
 
 module.exports.getUserById = (req, res, next) => {
   User.findById(req.params.userId)
-    .orFail(new Error('NotFound'))
+    .orFail(new NotFoundError('Пользоваетль по указанному id не найден'))
     .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'CastError') {
         next(new BadRequestError('Некорректный id'));
-      } else if (err.message === 'NotFound') {
-        next(new NotFoundError('Пользоваетль по указанному id не найден'));
       } else {
         next(err);
       }
@@ -63,13 +61,11 @@ module.exports.getUserById = (req, res, next) => {
 module.exports.editDataUser = (req, res, next) => {
   const { name, about } = req.body;
   User.findByIdAndUpdate(req.user._id, { name, about }, { new: 'true', runValidators: true })
-    .orFail(new Error('NotFound'))
+    .orFail(new NotFoundError('Пользоваетль по указанному id не найден'))
     .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new BadRequestError(err.message));
-      } else if (err.message === 'NotFound') {
-        next(new NotFoundError('Пользоваетль по указанному id не найден'));
       } else {
         next(err);
       }
@@ -79,13 +75,11 @@ module.exports.editDataUser = (req, res, next) => {
 module.exports.editAvatarUser = (req, res, next) => {
   const { avatar } = req.body;
   User.findByIdAndUpdate(req.user._id, { avatar }, { new: 'true', runValidators: true })
-    .orFail(new Error('NotFound'))
+    .orFail(new NotFoundError('Пользоваетль по указанному id не найден'))
     .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new BadRequestError(err.message));
-      } else if (err.message === 'NotFound') {
-        next(new NotFoundError('Пользоваетль по указанному id не найден'));
       } else {
         next(err);
       }
